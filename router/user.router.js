@@ -9,10 +9,32 @@ const mdlwr = require('../midleware/user.midleware')
 
 router.get('/', controller.getAllUsers)
 
-router.get('/:userId', mdlwr.checkIfUserExist, controller.getUserById)
+router.post(
+  '/',
+  mdlwr.isBodyValid,
+  controller.create
+)
 
-router.put('/:userId', mdlwr.checkIfUserExist, controller.updateUser)
+router.get(
+  '/:userId',
+  mdlwr.isIdValid,
+  mdlwr.checkIfUserExist,
+  controller.getUserById
+)
 
-router.delete('/:userId', mdlwr.checkIfUserExist, controller.deleteUser)
+router.put(
+  '/:userId',
+  mdlwr.isIdValid,
+  mblwr.isBodyValidUpdate,
+  mdlwr.checkIfUserExist,
+  controller.updateUser
+)
+
+router.delete(
+  '/:userId',
+  mdlwr.isIdValid,
+  mdlwr.checkIfUserExist,
+  controller.deleteUser
+)
 
 module.exports = router
