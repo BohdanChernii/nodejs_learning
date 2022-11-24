@@ -3,6 +3,8 @@ require('dotenv').config()
 const configs = require('./config/config')
 const userRouter = require('./router/user.router')
 const apartmentRouter = require('./router/apartments.router')
+const mongoose = require("mongoose");
+
 
 const app = express()
 app.use(express.json())
@@ -23,7 +25,8 @@ app.use((err, req, res, next) => {
   })
 })
 
-app.listen(configs.PORT, () => {
+app.listen(configs.PORT, async () => {
+  await mongoose.connect(configs.MONGO_URL)
   console.log(`${configs.PORT} works`);
 })
 

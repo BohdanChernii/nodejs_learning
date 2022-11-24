@@ -9,6 +9,8 @@ const mdlwr = require('../midleware/user.midleware')
 
 router.get('/', controller.getAllUsers)
 
+router.post('/',mdlwr.checkIsEmailUnique, controller.create)
+
 router.get('/:userId', mdlwr.checkIfUserExist, controller.getUserById)
 
 router.put('/:userId', mdlwr.checkIfUserExist, controller.updateUser)
