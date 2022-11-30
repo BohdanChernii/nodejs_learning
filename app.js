@@ -1,14 +1,18 @@
 const express = require('express')
 const mongoose = require('mongoose')
 require('dotenv').config()
-const {userRouter} = require('./routers')
+const {userRouter,authRouter} = require('./routers')
 const config = require('./config/user.config')
 
 const app = express()
 
 
-app.use('/users', userRouter)
+
 app.use(express.urlencoded({extended:true}))
+app.use(express.json())
+
+app.use('/users', userRouter)
+app.use('/auth',authRouter)
 
 app.get('/', (req, res) => {
   res.json('Welcome')

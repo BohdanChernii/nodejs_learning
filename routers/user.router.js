@@ -10,23 +10,23 @@ router.get(
 
 router.post(
   '/',
-  // mdwlr.isNewUserValid,
+  mdwlr.isNewUserValid,
   // mdwlr.isBodyValidCreate,
   // mdwlr.userNormalizator,
-  // mdwlr.checkIsEmailUnique,
+  mdwlr.checkIsEmailUnique,
   usersController.createUser)
 
 router.get('/:userId',
   mdwlr.isUserIdValid,
-  mdwlr.checkIsUserExist,
+  mdwlr.getUserDynamically('userId','params','_id'),
   usersController.getUserById)
 
 
-router.put(
-  '/:userId',
+router.put('/:userId',
   mdwlr.isUserIdValid,
   mdwlr.isEditUserValid,
   // mdwlr.isBodyValidUpdate,
+  mdwlr.getUserDynamically('userId','params','_id'),
   mdwlr.userNormalizator,
   usersController.updateUser
 )
