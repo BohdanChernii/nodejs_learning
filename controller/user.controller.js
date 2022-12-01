@@ -1,35 +1,30 @@
-const User = require("../users/User");
+const User = require("../dataBase/User");
+const {userService} = require("../service")
+
 module.exports = {
   getAllUsers: async (req, res, next) => {
     try {
-      const users = await User.find({})
+      const users = await userService.findByParams()
       console.log('users!!!!');
       res.json(users)
     } catch (err) {
-      // res.status(400).json({
-      //   message: err.message,
-      //   code: 4001
-      // })
       next(err)
     }
 
   },
-  getUserById: (req, res, next) => {
+  getUserById: async (req, res, next) => {
     try {
-      // const {userId} = req.params
-      // const userInfo = req.body
-      res.json(req.user)
+      const {userId} = req.params
+      const user = userService.findByIdWithCars({_id: user._id})
+      res.json(user)
     } catch (err) {
-      // res.status(400).json({
-      //   message: err.message,
-      //   code: 4001
-      // })
+
       next(err)
     }
   },
   create: async (req, res, next) => {
     try {
-      await User.create(req.body)
+      await userService.create(req.body)
       res.json('user created')
     } catch (err) {
       next(err)
@@ -39,25 +34,19 @@ module.exports = {
     try {
       const {userId} = req.params
       const userInfo = req.body
-      await User.findByIdAndUpdate(userId, userInfo)
+      await userService.updateUser(userId, userInfo)
     } catch (err) {
-      // res.status(400).json({
-      //   message: err.message,
-      //   code: 4001
-      // })
+
       next(err)
     }
   },
   deleteUser: async (req, res, next) => {
     try {
       const {userId} = req.params
-      await User.deleteOne({_id: userId})
+      await userService.delete({_id: userId})
       res.status(204).json('user deleted')
     } catch (err) {
-      // res.status(4000).json({
-      //   message: err.message,
-      //   code: 4001
-      // })
+
       next(err)
     }
   }

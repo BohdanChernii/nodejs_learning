@@ -1,4 +1,4 @@
-const User = require('../users/User')
+const User = require('../dataBase/User')
 const CustomError = require('../error/customError')
 module.exports = {
   checkIfUserExist: async (req, res, next) => {
