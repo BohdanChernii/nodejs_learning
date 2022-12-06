@@ -42,6 +42,33 @@ module.exports = {
     } catch (err) {
       next(err)
     }
-  }
+  },
 
+  logout: async (req, res, next) => {
+    try {
+
+      const {accessToken} = req.tokenInfo
+
+      await OAuth.deleteOne({accessToken})
+
+      res.status(204)
+
+    } catch (err) {
+      next(err)
+    }
+  },
+
+  logoutAll: async (req, res, next) => {
+    try {
+
+      const {accessToken} = req.tokenInfo
+
+      await OAuth.deleteMany({accessToken})
+
+      res.sendStatus(204)
+
+    } catch (err) {
+      next(err)
+    }
+  }
 }

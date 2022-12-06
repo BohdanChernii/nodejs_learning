@@ -1,3 +1,3 @@
 module.exports = {
-  tokenType: require('./tokenType.enum')
+  tokenTypeEnum: require('./tokenType.enum')
 }

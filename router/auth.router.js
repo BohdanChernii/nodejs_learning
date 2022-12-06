@@ -16,4 +16,15 @@ router.post(
   authMdlwr.checkRefreshToken,
   authController.refresh)
 
+router.post(
+  '/logout',
+  authMdlwr.checkAccessToken,
+  authController.logout)
+
+
+router.post(
+  '/logoutAll',
+  authMdlwr.checkAccessToken,
+  authController.logoutAll)
+
 module.exports = router
