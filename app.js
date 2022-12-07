@@ -17,8 +17,7 @@ app.use('/users', userRouter)
 app.use('/auth', authRouter)
 app.use('/car',carRouter)
 
-app.use(express.static('css'));
-app.use(express.static('html'));
+
 
 app.get('/', (req, res) => {
   res.json('Welcome');

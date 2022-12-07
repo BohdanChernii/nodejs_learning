@@ -46,14 +46,15 @@ module.exports = {
 
   logout: async (req, res, next) => {
     try {
-
+      console.log(req.tokenInfo);
       const {accessToken} = req.tokenInfo
 
       await OAuth.deleteOne({accessToken})
 
-      res.status(204)
+      res.sendStatus(204)
 
     } catch (err) {
+
       next(err)
     }
   },
@@ -71,4 +72,6 @@ module.exports = {
       next(err)
     }
   }
+
+
 }
