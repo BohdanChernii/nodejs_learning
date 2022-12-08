@@ -1,0 +1,4 @@
+module.exports={
+  CONFIRM_ACTION:'CNFA',
+  FORGOT_PASSWORD: 'FPWD_ACT'
+}

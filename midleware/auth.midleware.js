@@ -4,6 +4,8 @@ const ApiError = require('../error/ApiError')
 const {tokenPair} = require('../enum')
 const authValidator = require('../validator/auth.validator')
 const {FORGOT_PASS} = require('../config/email-action.enum')
+const {FORGOT_PASSWORD} = require("../config/token-action.enum");
+const ActionToken = require('../dataBase/ActionToken')
 
 module.exports = {
   isBodyValid: async (res, req, next) => {
@@ -71,5 +73,31 @@ module.exports = {
       next(err)
 
     }
-  }
+  },
+
+  checkActionToken: async (req, res, next) => {
+    try {
+      const accessToken = req.get('Authorization')
+
+      if (!accessToken) {
+        throw new ApiError('No token', 401)
+      }
+      authService.checkToken(accessToken,FORGOT_PASSWORD)
+
+
+      const tokenInfo = await ActionToken
+        .findOne({token:accessToken,type:FORGOT_PASSWORD})
+        .populate('_user_id')
+
+      if (!tokenInfo) {
+        throw new ApiError('Action token not valid', 401)
+      }
+
+      req.tokenInfo = tokenInfo
+      next()
+    } catch (err) {
+      next(err)
+    }
+  },
+
 }

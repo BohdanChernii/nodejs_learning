@@ -27,4 +27,13 @@ router.post(
   authMdlwr.checkAccessToken,
   authController.logoutAll)
 
+router.post('/password/forgot',
+  userMdlwr.getUserDynamically('email'),
+  authController.forgotPassword)
+
+router.put('/password/forgot',
+  authMdlwr.checkActionToken,
+  authController.forgotPasswordAfterForgot
+  )
+
 module.exports = router
