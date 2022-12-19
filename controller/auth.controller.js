@@ -1,6 +1,9 @@
 const authService = require('../service/auth.service')
 const emailService = require('../service/email.service')
+const smsService = require('../service/sms.service')
+const smsTemplate = require('../helper/sms-template.helper')
 const Auth = require('../dataBase/Auth')
+const smsActionTypeEnum = require('../eum/sms.action.enum')
 const {FORGOT_PASSWORD} = require("../config/token.action");
 const {FRONTEND_URL} = require("../config");
 const ActionToken = require('../dataBase/ActionToken')
@@ -11,12 +14,15 @@ module.exports = {
   login: async (req, res, next) => {
     try {
       const {body, user} = req
+      await Promise.allSettled([
+        await emailService.sendMail('bodiachernii@gmail.com', 'Welcome', {
+          userName: user.name,
+          array: [{number: 1}],
+          condition: false
+        }),
+        await smsService.sendSms(smsTemplate[smsActionTypeEnum.WELCOME](user.name), user.phone)
+      ])
 
-      await emailService.sendMail('bodiachernii@gmail.com', 'Welcome', {
-        userName: user.name,
-        array: [{number: 1}, {number: 2}, {number: 3}],
-        condition: false
-      })
 
       await user.comparePassword(body.password)
       // await authService.comparePassword(body.password, user.password)

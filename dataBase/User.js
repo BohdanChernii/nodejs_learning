@@ -1,11 +1,13 @@
 const {Schema, model} = require('mongoose')
 const authService = require("../service/auth.service");
 
+
 const userSchema = new Schema({
   name: {type: String, trim: true, default: '', require: true},
   age: {type: Number, default: 18, min: 18, max: 120, require: true},
   email: {type: String, trim: true, default: '', require: true},
   password: {type: String, require: true},
+  phone:{type:String,require:true}
 }, {
   timestamps: true,
   toJSON:{virtuals:true},
