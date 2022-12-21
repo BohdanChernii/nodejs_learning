@@ -1,9 +1,9 @@
-const removeOldPassword = require('./removeOldPassword')
 const removeOldTokens = require('./removeOldTokens')
+const removeOldPasswords = require('./removeOldPasswords')
 
 const cronRunner = () => {
-  removeOldPassword.start()
   removeOldTokens.start()
+  removeOldPasswords.start()
 }
 module.exports = {
   cronRunner

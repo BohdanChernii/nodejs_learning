@@ -1,13 +1,12 @@
-const userController = require('../controller/user.controller')
 const User = require('../dataBase/User')
 const ApiError = require("../error/error");
-const {newUserValidator, editUserValidator} = require('../validator/user.validator')
-const commonValidator = require('../validator/common.validator')
+const {isNewUserValid, editUserValid} = require('../validator/user-validator')
+const {idValidator} = require('../validator/common.validator')
 module.exports = {
-
   getUserDynamically: (fieldName, from = 'body', dbField = fieldName) => async (req, res, next) => {
     try {
       const fieldToSearch = req[from][fieldName]
+
       const user = await User.findOne({[dbField]: fieldToSearch})
 
       if (!user) {
@@ -19,20 +18,19 @@ module.exports = {
       next(err)
     }
   },
-
-  checkEmailUnique: async (req, res, next) => {
+  checkIsEmailUnique: async (req, res, next) => {
     try {
       const {email} = req.body
-
       if (!email) {
-        throw new ApiError('Email not present', 400)
+        throw new ApiError('Email not present', 401)
       }
 
-      const user = await User.findOne({email})
+      const user = User.findOne({email})
 
       if (user) {
-        throw new ApiError('User with this email already exist', 409)
+        throw new ApiError('User with email this already exist', 409)
       }
+
       next()
     } catch (err) {
       next(err)
@@ -41,10 +39,12 @@ module.exports = {
 
   isNewUserValid: async (req, res, next) => {
     try {
-      const validate = newUserValidator.validate(req.body)
+      const validate = isNewUserValid.validate(req.body)
+
       if (validate.error) {
-        throw new ApiError(validate.error.message)
+        throw new ApiError(validate.error.message, 400)
       }
+
       req.body = validate.value
       next()
     } catch (err) {
@@ -52,33 +52,31 @@ module.exports = {
     }
   },
 
-  isEditUserValid: async (req, res, next) => {
+  editUserValid: async (req, res, next) => {
     try {
-      const validate = editUserValidator.validate(req.body)
+      const validate = editUserValid.validate(req.body)
+
       if (validate.error) {
         throw new ApiError(validate.error.message, 400)
       }
 
       req.body = validate.value
-
+      next()
     } catch (err) {
       next(err)
     }
   },
-
   isUserIdValid: async (req, res, next) => {
     try {
       const {userId} = req.params
-      const validate = commonValidator.isValidator.validate(userId)
-
+      const validate = idValidator.validate(userId)
       if (validate.error) {
         throw new ApiError(validate.error.message, 400)
       }
-
+      req.body = validate.value
       next()
     } catch (err) {
       next(err)
     }
   }
-
 }

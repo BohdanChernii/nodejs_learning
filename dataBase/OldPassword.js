@@ -1,11 +1,9 @@
-const {Schema, model} = require('mongoose')
-
+const {Schema,model} =require('mongoose')
 const oldPasswordSchema = new Schema({
-  _user_id: {type: Schema.Types.ObjectId, ref: 'User'},
-  password: {type: String},
-}, {
-  versionKey: false,
-  timestamps: true
+  _user_id:{type:Schema.Types.ObjectId,ref:'User'},
+  password:{type: String}
+},{
+  timestamps:true,
+  versionKey:false
 })
-
-module.exports = model('OldPassword', oldPasswordSchema)
+module.exports = model('OldPassword',oldPasswordSchema)

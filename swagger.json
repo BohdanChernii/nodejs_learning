@@ -2,47 +2,49 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0",
-    "title": "June-2022"
+    "title": "Learn"
   },
   "paths": {
     "/users": {
       "get": {
         "description": "Get all users",
-        "tags": ["User"],
-        "operationId": "getAllUsers",
+        "operationId": "get-all-users",
+        "tags": [
+          "Users"
+        ],
         "responses": {
           "200": {
             "description": "Success response",
-           "schema": {
-             "type": "array",
-             "items": {
-               "$ref": "#/definitions/SingleUser"
-             }
-           }
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SingleUser"
+              }
+            }
           }
         }
       }
     },
     "/users/{userId}": {
       "get": {
-        "description": "Get user by ID",
-        "operationId": "get-user-by-id",
+        "description": "Get one  user",
+        "operationId": "get-one-user",
         "parameters": [
           {
-            "name": "userID",
-            "in": "path",
+            "name": "userId",
+            "in": "formData",
             "type": "string",
             "required": true
           },
           {
             "name": "Authorization",
-            "in": "header",
+            "in": "formData",
             "type": "string",
             "required": true
           }
         ],
         "tags": [
-          "Users"
+          "User"
         ],
         "responses": {
           "200": {
@@ -52,7 +54,7 @@
             "description": "Success response"
           },
           "400": {
-            "description": "Bad request",
+            "description": "bad request",
             "schema": {
               "$ref": "#/definitions/ApiError"
             }
@@ -60,17 +62,14 @@
         }
       },
       "put": {
-        "description": "Update user",
-        "tags": [
-          "User"
-        ],
-        "operationId": "updateUserById",
+        "description": "Update one user",
+        "operationId": "update-one-user",
         "parameters": [
           {
-            "name": "email",
+            "name": "userId",
             "in": "formData",
             "type": "string",
-            "required": false
+            "required": true
           }
         ],
         "responses": {
@@ -114,11 +113,16 @@
           "example": "Bohdan"
         },
         "age": {
-          "type": "integer"
+          "type": "number",
+          "example": 21
         },
         "email": {
           "type": "string",
           "example": "bohdanchik@gmail.com"
+        },
+        "phone": {
+          "type": "string",
+          "example": "+380996510938"
         }
       }
     }

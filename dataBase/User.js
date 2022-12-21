@@ -1,44 +1,39 @@
 const {Schema, model} = require('mongoose')
-const authService = require("../service/auth.service");
-
+const authService = require('../services/auth.service')
 
 const userSchema = new Schema({
-  name: {type: String, trim: true, default: '', require: true},
-  age: {type: Number, default: 18, min: 18, max: 120, require: true},
-  email: {type: String, trim: true, default: '', require: true},
-  password: {type: String, require: true},
-  phone:{type:String,require:true}
+  name: {type: String, min: 3, default: '', required: true},
+  age: {type: Number, min: 18, max: 120, required: true},
+  password: {type: String},
+  avatar:{type:String},
+  email: {type: String, default: '', required: true},
+  phone: {type: String,required:true}
 }, {
   timestamps: true,
-  toJSON:{virtuals:true},
-  toObject:{virtuals:true}
+  toJSON: {virtuals: true},
+  toObject: {virtuals: true}
 })
-
 
 userSchema.virtual('fullName').get(function () {
   return `${this.name} BlaBlaBla`
 })
 
-userSchema.statics = {//for schema // this = model
-  testStatics() {
-    console.log('I am static');
-  },
+userSchema.statics = {
 
-  async createUserWithHashPassword(user = {}) {
-    const hashedPassword = await authService.hashPassword(user.password)
-    return this.create({...user, password: hashedPassword})
-  },
+  async createWithHashPassword(userObject = {}) {
+    const hashPassword = authService.hashPassword(userObject.password)
 
+    return this.create({...userObject, password: hashPassword})
+  }
 
 }
 
-userSchema.methods = {//for single record
-  testMethods() {
-    console.log('I am method');
-  },
-  async comparePassword(password) {
-    await authService.comparePassword(this.password, password)
+userSchema.methods = {
+
+  async compareWithPassword(password) {
+    await authService.comparePasswords(this.password, password)
   }
+
 }
 
 module.exports = model('User', userSchema)

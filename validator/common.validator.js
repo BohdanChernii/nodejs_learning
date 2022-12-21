@@ -1,5 +1,8 @@
 const Joi = require('joi')
-const {MONGO_ID} = require('../config/regex')
+const regexp = require('../enum/regex.enum')
 module.exports = {
-  isValidator: Joi.string().regex(MONGO_ID)
+  idValidator: Joi.object({
+      _id: Joi.string().regex(regexp.MONGO_ID),
+    }
+  )
 }

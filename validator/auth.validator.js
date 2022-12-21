@@ -1,8 +1,10 @@
 const Joi = require('joi')
-const {PASSWORD,EMAIL} =require('../config/regex')
-module.exports = {
-  loginValidator:Joi.object({
-    password: Joi.string().regex(PASSWORD).trim().default('').required(),
-    email:Joi.string().regex(EMAIL).trim().default('').required()
+
+const regex = require('../enum/regex.enum')
+
+module.exports ={
+  authValidator:Joi.object({
+    email:Joi.string().regex(regex.EMAIL).lowercase().trim().required(),
+    password:Joi.string().regex(regex.PASSWORD).required()
   })
 }

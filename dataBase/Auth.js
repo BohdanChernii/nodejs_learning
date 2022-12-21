@@ -1,8 +1,9 @@
 const {Schema, model} = require('mongoose')
 
 const authSchema = new Schema({
-  accessToken: {type: String, trim: true, require: true},
-  refreshToken: {type: String, trim: true, require: true}
+  _user_id: {type: Schema.Types.ObjectId, ref: 'User'},
+  accessToken: {type: String},
+  refreshToken: {type: String},
 })
 
 module.exports = model('Auth', authSchema)

@@ -1,4 +1,4 @@
 module.exports = {
-  CONFIRM_ACTION: 'CMAN',
+  CONFIRM_ACCOUNT: 'CMAT',
   FORGOT_PASSWORD: 'FTPD'
 }
