@@ -6,6 +6,7 @@ const authMdlwr = require('../midleware/auth.midleware')
 
 router.get('/', userController.getAllUsers)
 
+
 router.post('/',
   userMdlwr.isUserIdValid,
   userMdlwr.checkIsEmailUnique,
@@ -31,4 +32,5 @@ router.patch('/:userId/avatar',
   userMdlwr.getUserDynamically('userId','params','_id'),
   userController.uploadAvatar
   )
+
 module.exports = router
