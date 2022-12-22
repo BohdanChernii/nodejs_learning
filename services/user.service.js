@@ -23,6 +23,7 @@ module.exports = {
   },
 
   create: async (userInfo) => {
+    console.log(userInfo);
     return User.create(userInfo)
   },
 

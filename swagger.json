@@ -21,6 +21,15 @@
                 "$ref": "#/definitions/SingleUser"
               }
             }
+          },
+          "400": {
+            "description": "Users not found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ApiError"
+              }
+            }
           }
         }
       }
@@ -71,6 +80,9 @@
             "type": "string",
             "required": true
           }
+        ],
+        "tags": [
+          "Update user"
         ],
         "responses": {
           "200": {

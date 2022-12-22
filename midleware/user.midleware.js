@@ -3,15 +3,19 @@ const ApiError = require("../error/error");
 const {isNewUserValid, editUserValid} = require('../validator/user-validator')
 const {idValidator} = require('../validator/common.validator')
 module.exports = {
-  getUserDynamically: (fieldName, from = 'body', dbField = fieldName) => async (req, res, next) => {
+  getUserDynamically:
+    (fieldName, from = 'body', dbField = fieldName) => async (req, res, next) => {
     try {
       const fieldToSearch = req[from][fieldName]
 
+      console.log({[dbField]: fieldToSearch})
       const user = await User.findOne({[dbField]: fieldToSearch})
 
+      console.log(user);
       if (!user) {
         throw new ApiError('User not found', 404)
       }
+
       req.user = user
       next()
     } catch (err) {
@@ -21,11 +25,12 @@ module.exports = {
   checkIsEmailUnique: async (req, res, next) => {
     try {
       const {email} = req.body
+
       if (!email) {
         throw new ApiError('Email not present', 401)
       }
-
-      const user = User.findOne({email})
+      console.log(email);
+      const user = await User.findOne({email})
 
       if (user) {
         throw new ApiError('User with email this already exist', 409)

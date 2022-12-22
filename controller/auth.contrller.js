@@ -7,7 +7,7 @@ const OldPassword = require('../dataBase/OldPassword')
 const User = require('../dataBase/User')
 const {FORGOT_PASSWORD} = require("../enum/token.action.enum");
 const {FRONTEND_URL} = require("../config");
-const {FORGOT_PASS} = require("../enum/email.action.enum");
+const {FORGOT_PASS, WELCOME} = require("../enum/email.action.enum");
 const smsActionTypeEnum = require('../enum/sms-action-type.enum')
 const smsTemplate = require('../helper/sms-template-helper')
 
@@ -16,19 +16,26 @@ module.exports = {
     try {
       const {user, body} = req
 
+      console.log(user);
+
       await Promise.allSettled([
-        emailService.sendMail(user.email || 'bodiachernii@gmail.com', {userName: user.name, array: [{number: 1}], condition:false}),
-        smsService.sendSms(smsTemplate[smsActionTypeEnum.WELCOME](user.name), user.phone)
+        emailService.sendMail('b.cherniy@nltu.lviv.ua'   ,WELCOME,
+          {userName: user.name, array: [{number: 1}], condition:false}),
+        //
+        // smsService.sendSms(smsTemplate[smsActionTypeEnum.WELCOME](user.name), user.phone)
+
       ])
-      await user.compareOldPasswords(body.password)
+      await user.compareWithPassword(body.password)
 
       const tokenPair = authService.generateAccessToken({id: user._id})
 
       await Auth.create({...tokenPair, _user_id: user._id})
-      req.join({
+
+      res.json({
         user,
         ...tokenPair
       })
+
       next()
     } catch (err) {
       next(err)

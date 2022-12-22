@@ -8,6 +8,7 @@ require('dotenv').config()
 const swagger = require('./swagger.json')
 const cron = require('./cron')
 const userRouter = require('./router/user.router')
+const authRouter = require('./router/auth.router')
 
 const app = express()
 
@@ -17,10 +18,11 @@ app.use(express.static('static'))
 
 mongoose.set('strictQuery', true)
 
-app.use(fileUpload)
-
+app.use(fileUpload())
 
 app.use('/users', userRouter)
+app.use('/auth', authRouter)
+
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swagger))
 
 app.get('/', (req, res) => {
@@ -29,8 +31,7 @@ app.get('/', (req, res) => {
 
 app.use((err, req, res, next) => {
   res.status(err.status || 500).json({
-    message: err.message || 'Unknown error',
-    status: err.status || 500
+    message: err.message || 'Unknown error', status: err.status || 500
   })
 })
 

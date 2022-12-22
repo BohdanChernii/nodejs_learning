@@ -1,6 +1,6 @@
-const User = require ('../dataBase/User')
+const User = require('../dataBase/User')
 const userService = require('../services/user.service')
-
+const s3Service = require('../services/s3.service')
 module.exports = {
   getAllUsers: async (req, res, next) => {
     try {
@@ -24,7 +24,7 @@ module.exports = {
 
   createUser: async (req, res, next) => {
     try {
-      const user = await userService.create(req.body)
+      await User.createWithHashPassword(req.body)
       res.json('User created')
     } catch (err) {
       next(err)
@@ -54,13 +54,14 @@ module.exports = {
   },
 
 
-  uploadAvatar:async (req,res,next)=>{
+  uploadAvatar: async (req, res, next) => {
     try {
+      const uploadedData = await s3Service.uploadPublicFile(req.files.avatar,'user',req.user._id)
 
-
+      await  User.findByIdAndUpdate(req.user._id,{avatar:uploadedData.Location},{new:true})
       res.json('Image ready')
       next()
-    }catch (err){
+    } catch (err) {
       next(err)
     }
   }

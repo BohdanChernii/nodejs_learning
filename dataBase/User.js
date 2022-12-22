@@ -6,9 +6,10 @@ const userSchema = new Schema({
   age: {type: Number, min: 18, max: 120, required: true},
   password: {type: String},
   avatar:{type:String},
-  email: {type: String, default: '', required: true},
+  email: { type: String, required: true, trim: true, lowercase: true, unique: true },
   phone: {type: String,required:true}
 }, {
+  versionKey:false,
   timestamps: true,
   toJSON: {virtuals: true},
   toObject: {virtuals: true}
@@ -21,7 +22,8 @@ userSchema.virtual('fullName').get(function () {
 userSchema.statics = {
 
   async createWithHashPassword(userObject = {}) {
-    const hashPassword = authService.hashPassword(userObject.password)
+    console.log(userObject);
+    const hashPassword = await authService.hashPassword(userObject.password)
 
     return this.create({...userObject, password: hashPassword})
   }

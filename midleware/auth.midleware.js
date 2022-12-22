@@ -11,6 +11,7 @@ const {FORGOT_PASS} = require("../enum/email.action.enum");
 module.exports = {
   isBodyValid: async (req, res, next) => {
     try {
+
       const validate = authValidator.validate(req.body)
       if (validate.error) {
         throw new ApiError(validate.error.message, 400)
@@ -23,7 +24,6 @@ module.exports = {
   },
   checkAccessToken: async (req, res, next) => {
     try {
-
       await emailService.sendMail('bodiachernii@gmail.com', FORGOT_PASS)
       const accessToken = req.get('Authorization')
       if (!accessToken) {
