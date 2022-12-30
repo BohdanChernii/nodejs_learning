@@ -5,4 +5,4 @@ const userSchema = new Schema({
   age: {type: Number, required: true}
 })
 
-module.exports = model('User', userSchema)
+module.exports = model('user', userSchema)

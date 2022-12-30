@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 mongoose.set('strictQuery', false)
+// require('dotenv').config()
 const User = require("./dataBase/User");
 
 const app = express();
@@ -21,13 +22,14 @@ app.post('/users', async (req, res) => {
 const connection = async () => {
   let dbCon = false
 
-  while (!dbCon) {
+  if (!dbCon) {
     try {
       console.log('Connecting to database...')
-      await mongoose.connect(process.env.MONGO_URI)
+       await mongoose.connect('mongodb://user:user@db:27017/docker')
       dbCon = true
       console.log('Database available!!!')
     } catch (e) {
+      console.log(e);
       console.log('Database unavailable, wait 3 seconds')
       await new Promise(resolve => setTimeout(resolve, 3000))
     }
@@ -36,11 +38,12 @@ const connection = async () => {
 }
 const start = async () => {
   try {
+    await connection()
 
-    await app.listen(+process.env.PORT, process.env.HOST,1, async()=>{
-      await connection()
-    })
-    console.log(`Server listening on ${process.env.PORT} port`)
+    // await mongoose.connect('mongodb://user:user@db:27017/docker')
+    await app.listen(5000, '0.0.0.0')
+
+    console.log(`Server listening on ${5000} port`)
   } catch (e) {
     console.log(e);
 
